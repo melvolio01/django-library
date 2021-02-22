@@ -23,6 +23,7 @@ class BookInstanceAdmin(admin.ModelAdmin):
         }),
     )
 
+#Registering models with admin site
 admin.site.register(Author, AuthorAdmin)
 admin.site.register(Genre)
 admin.site.register(Language)
