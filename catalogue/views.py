@@ -2,7 +2,9 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.views import generic
 from catalogue.models import Book, BookInstance, Author, Genre
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.admin.views.decorators import staff_member_required
+from django.utils.decorators import method_decorator
 
 # Create your views here.
 def index(request):
@@ -47,3 +49,13 @@ class LoanedBooksByUserListView(LoginRequiredMixin,generic.ListView):
 
     def get_queryset(self):
         return BookInstance.objects.filter(borrower=self.request.user).filter(status__exact='o').order_by('due_back')
+
+class LoanedBooksAllUserListView(PermissionRequiredMixin,generic.ListView):
+    "Class-based view listing all books on loan to all users"
+    model = BookInstance
+    permission_required = 'catalog.can_mark_returned'
+    template_name = 'catalogue/bookinstance_list_borrowed_all_users.html'
+    paginate_by = 10
+
+    def get_queryset(self):
+        return BookInstance.objects.filter(status__exact='o').order_by('due_back')
