@@ -4,7 +4,9 @@
     <h1>All Borrowed Books</h1>
     <ul>
     {% for book in bookinstance_list %}
-        <li><a href="{{ book.get_absolute_url }}">{{ book.book.title }}</a><h8 class="{% if book.is_overdue %}text-danger{% endif %}">({{ book.due_back}})</h8> - <strong>{{ book.borrower}}</strong> </li>
+        <li><a href="{{ book.get_absolute_url }}">{{ book.book.title }}</a><h8 class="{% if book.is_overdue %}text-danger{% endif %}">({{ book.due_back}})</h8> - <strong>{{ book.borrower}}</strong> 
+            {% if perms.catalog.can_mark_returned %}- <a href="{% url 'renew-book-librarian' book.id %}">Renew</a>  {% endif %}
+        </li>
         {% endfor %}
     </ul>
 {% endblock %}

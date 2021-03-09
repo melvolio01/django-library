@@ -22,7 +22,10 @@
           <li><a href="{% url 'books' %}">All books</a></li>
           <li><a href="{% url 'authors' %}">All authors</a></li>
           {% if user.is_authenticated %}
-          <li>User: {{ user.get_username }}</li>
+            {% if user.is_superuser %}
+            <li><a href="{% url 'all-borrowed' %}">All loaned books</a></li>
+            {% endif %}
+          <li>User: {{ user }}</li>
           <li><a href="{% url 'my-borrowed' %}">My Borrowed</a></li>
           <li><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>
           {% else %}
